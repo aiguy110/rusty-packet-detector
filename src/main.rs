@@ -11,9 +11,9 @@ fn main() {
 
     let mut iface_ind_str = String::new();
     io::stdin().read_line(&mut iface_ind_str).unwrap();
-    println!("Got: \"{}\"", iface_ind_str);
+    println!("Got: \"{}\"", iface_ind_str.trim());
 
-    let iface_ind = iface_ind_str.parse::<usize>().unwrap();
+    let iface_ind = iface_ind_str.trim().parse::<usize>().unwrap();
     let selected_iface = &interfaces[iface_ind];
 
     let (_, mut rx) = match datalink::channel(selected_iface, Default::default()) {
@@ -23,7 +23,7 @@ fn main() {
     };
 
     println!("Listening for packets...");
-    while let Ok(_) = rx.next() {
+    while let Ok(pkt_buf) = rx.next() {
         println!("Got packet!")
     }
 }
